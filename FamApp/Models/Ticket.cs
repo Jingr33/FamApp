@@ -9,7 +9,6 @@ namespace FamApp.Models
         [Required]
         public string Name { get; set; }
         public string? Description { get; set; }
-        public string? User { get; set; }
 
         public ICollection<UserTicket>? UserTickets { get; set; }
     }

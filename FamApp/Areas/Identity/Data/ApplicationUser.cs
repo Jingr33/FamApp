@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using FamApp.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace FamApp.Areas.Identity.Data;
@@ -13,5 +14,7 @@ public class ApplicationUser : IdentityUser
     [PersonalData]
     [Column(TypeName = "nvarchar(100)")]
     public string Nick {  get; set; }
+
+    public ICollection<UserTicket> UserTickets { get; set; } = new List<UserTicket>();
 }
 
