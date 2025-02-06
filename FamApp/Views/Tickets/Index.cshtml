@@ -1,0 +1,28 @@
+﻿@model List<Ticket>
+
+
+    <div class="container">
+        <div class="row pt-4">
+            <div class="col-6">
+                <a class="btn btn-primary">
+                    Create new Ticket
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        @foreach (var one_tick in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    @one_tick.Name
+                </div>
+                <div class="card-body">
+                    @one_tick.Description
+                    <hr />
+                    @one_tick.User
+                </div>
+            </div>
+        }
+    </div>
