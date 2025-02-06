@@ -10,7 +10,7 @@ namespace FamApp.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        private TicketsController (ApplicationDbContext db)
+        public TicketsController (ApplicationDbContext db)
         {
             this._db = db;
         }
@@ -19,6 +19,19 @@ namespace FamApp.Controllers
         {
             List<Ticket> tickets = _db.Tickets.ToList();
             return View(tickets);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Ticket obj)
+        {
+            _db.Tickets.Add(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index", "Tickets");
         }
     }
 }
