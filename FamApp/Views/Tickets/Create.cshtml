@@ -16,7 +16,19 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Description" class="form-label">Description</label>
-                            <input asp-for="Description" class="form-control" rows="3" placeholder="Enter a description" />
+                            <input asp-for="Description" class="form-control"  placeholder="Enter a description" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Public" class="form-label">Public Ticket</label>
+                            <input asp-for="Public" type="checkbox" class="form-check-input"/>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Priority" class="form-label">Priority Ticket</label>
+                            <input asp-for="Priority" type="checkbox" class="form-check-input" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="DeadLineDate" class="form-label">Dead Line</label>
+                            <input asp-for="DeadLineDate" class="form-control" type="date" />
                         </div>
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">Create</button>

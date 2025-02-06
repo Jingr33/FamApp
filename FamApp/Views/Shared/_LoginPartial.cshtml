@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using FamApp.Areas.Identity.Data
 
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject             SignInManager<FamApp.Areas.Identity.Data.ApplicationUser> SignInManager
+@inject             UserManager<FamApp.Areas.Identity.Data.ApplicationUser> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

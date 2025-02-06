@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+span {
+    color: #707070;
+}
+.align-right {
+    text-align: right;
+}

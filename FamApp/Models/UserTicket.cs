@@ -7,7 +7,7 @@ namespace FamApp.Models
     {
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public Areas.Identity.Data.ApplicationUser User { get; set; }
 
         [ForeignKey("Ticket")]
         public int TicketId { get; set; }

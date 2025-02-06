@@ -2,9 +2,10 @@
 
 namespace FamApp.Models
 {
-    public class AppUser : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
-        public ICollection<Ticket> CraetedTicktes { get; set; }
+        public string Nick { get; set; } = "Unknown";
+        public ICollection<Ticket> CreatedTickets { get; set; }
         public ICollection<UserTicket> UserTickets { get; set; }
     }
 }

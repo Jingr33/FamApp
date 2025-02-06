@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 
 namespace FamApp.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : IdentityDbContext<Areas.Identity.Data.ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -34,5 +34,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
            .HasOne(ut => ut.Ticket)
            .WithMany(t => t.UserTickets)
            .HasForeignKey(ut => ut.TicketId);
+
+        builder.Entity<Ticket>()
+            .HasOne(t => t.CreatedByUser)
+            .WithMany(u => u.CreatedTickets)
+            .HasForeignKey(t => t.CreatedByUserId);
     }
 }
