@@ -1,38 +1,53 @@
-﻿@model Ticket
+﻿@model Ticket 
 
 
-<div class="container mt-4">
+<div class="container mt-4 mv-600">
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
-                <div class="card-header bg-primary">
-                    <h2>Create new Ticket</h2>
+                <div class="card-header bg-primary px-4 py-3">
+                    <h2 class="text-light">Vytvoření nového ticketu</h2>
                 </div>
-                <div card-body>
+                <div class="card-body">
                     <form asp-action="Create" method="post">
                         <div class="form-group mb-3">
-                            <label asp-for="Name" class="form-label">Title</label>
-                            <input asp-for="Name" class="form-control" placeholder="Enter a Title" />
+                            <label asp-for="Name" class="form-label">Název *</label>
+                            <input asp-for="Name" class="form-control" placeholder="Název ticketu" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <input asp-for="Description" class="form-control"  placeholder="Enter a description" />
+                            <label asp-for="Description" class="form-label">Popis</label>
+                            <input asp-for="Description" class="form-control"  placeholder="Popisek" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="Public" class="form-label">Public Ticket</label>
+                            <label asp-for="Public" class="form-label">Veřejný</label>
                             <input asp-for="Public" type="checkbox" class="form-check-input"/>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="Priority" class="form-label">Priority Ticket</label>
+                            <br/>
+                            <label asp-for="Priority" class="form-label">Prioritní</label>
                             <input asp-for="Priority" type="checkbox" class="form-check-input" />
                         </div>
                         <div class="form-group mb-3">
-                            <label asp-for="DeadLineDate" class="form-label">Dead Line</label>
+                            <label>Vyřeší *</label>
+                            <select name="SelectedUserIds" class="form-control" multiple="multiple">
+                                @if (ViewData["Users"] as SelectList != null)
+                                {
+                                    @foreach (var user in ViewData["Users"] as SelectList)
+                                    {
+                                        <option value="@user.Value">@user.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="DeadLineDate" class="form-label">Dead line termín *</label>
                             <input asp-for="DeadLineDate" class="form-control" type="date" />
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Create</button>
-                            <a asp-controller="Tickets" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary px-5 py-2">Vytvořit</button>
+                            </div>
+                            <div class="col-6 align-right">
+                                <a asp-controller="Tickets" asp-action="Index" class="btn btn-secondary px-4 py-2">Zrušit</a>
+                            </div>
                         </div>
                     </form>
                 </div>

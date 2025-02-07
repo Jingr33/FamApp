@@ -1,4 +1,5 @@
 using FamApp.Areas.Identity.Data;
+using FamApp.Data;
 using FamApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,17 +14,20 @@ namespace FamApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext db)
         {
             _logger = logger;
             this._userManager = userManager;
+            this._db = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewData["UserID"] = _userManager.GetUserId(this.User);
-            return View();
+            //ViewData["UserID"] = _userManager.GetUserId(this.User);
+            var user = await _userManager.GetUserAsync(this.User);
+            return View(user);
         }
 
         public IActionResult Privacy()

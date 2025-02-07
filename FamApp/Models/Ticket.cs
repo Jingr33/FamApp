@@ -1,5 +1,6 @@
 ﻿using FamApp.Areas.Identity.Data;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FamApp.Models
 {
@@ -14,6 +15,7 @@ namespace FamApp.Models
         public bool Priority { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime? DeadLineDate { get; set; }
+        [ForeignKey("CreatedByUser")]
         public string CreatedByUserId { get; set; }
         public ApplicationUser CreatedByUser { get; set; }
 

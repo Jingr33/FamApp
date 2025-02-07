@@ -26,4 +26,9 @@ span {
 }
 .align-right {
     text-align: right;
+}.align-center {
+     text-align: center;
+ }
+.mw-600 {
+    max-width: 600px;
 }

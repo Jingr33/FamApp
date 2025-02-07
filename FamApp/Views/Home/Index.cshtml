@@ -1,9 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using FamApp.Areas.Identity.Data
+@model ApplicationUser
+
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>User ID: @ViewData["UserID"]</p>
+    <h1 class="display-4">Vítejte!</h1>
+    <p>User Přezdívka: @Model.Nick @* @ViewData["UserID"] *@</p>
+</div>
+
+<hr/>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>
+                <b>Informace o mně</b>
+            </h2>
+        </div>
+    </div>
+
+    <div class="row d-inline">
+        <form action="Update" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="Nick">Moje přezdívka</label>
+                <input asp-for="Nick" class="form-control" value="@Model.Nick" placeholder="@Model.Nick"/>
+            </div>
+            <div class="form-group mb3">
+                <label >Moje barva</label>
+                <input type="color" class="color-picker" />
+            </div>
+        </form>
+    </div>
 </div>
