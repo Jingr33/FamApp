@@ -28,16 +28,19 @@ public class ApplicationDbContext : IdentityDbContext<Areas.Identity.Data.Applic
         builder.Entity<UserTicket>()
             .HasOne(ut => ut.User)
             .WithMany(u => u.UserTickets)
-            .HasForeignKey(ut => ut.UserId);
+            .HasForeignKey(ut => ut.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<UserTicket>()
            .HasOne(ut => ut.Ticket)
            .WithMany(t => t.UserTickets)
-           .HasForeignKey(ut => ut.TicketId);
+           .HasForeignKey(ut => ut.TicketId)
+           .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Ticket>()
             .HasOne(t => t.CreatedByUser)
             .WithMany(u => u.CreatedTickets)
-            .HasForeignKey(t => t.CreatedByUserId);
+            .HasForeignKey(t => t.CreatedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

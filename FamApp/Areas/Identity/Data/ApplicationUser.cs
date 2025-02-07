@@ -15,6 +15,7 @@ public class ApplicationUser : IdentityUser
     [Column(TypeName = "nvarchar(100)")]
     public string Nick {  get; set; }
 
+    public ICollection<Ticket> CreatedTickets { get; set; }
     public ICollection<UserTicket> UserTickets { get; set; } = new List<UserTicket>();
 }
 

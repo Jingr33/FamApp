@@ -13,9 +13,9 @@ namespace FamApp.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _db;
-        private readonly UserManager<Areas.Identity.Data.ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketsController (ApplicationDbContext db, UserManager<Areas.Identity.Data.ApplicationUser> userManager)
+        public TicketsController (ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             this._db = db;
             this._userManager = userManager;
@@ -37,6 +37,9 @@ namespace FamApp.Controllers
         {
             obj.CreationDate = DateTime.Now;
             obj.CreatedByUserId = _userManager.GetUserId(this.User);
+            Console.WriteLine("################################################################################");
+            Console.WriteLine(_userManager.GetUserId(this.User));
+            Console.WriteLine("################################################################################");
             _db.Tickets.Add(obj);
             _db.SaveChanges();
             return RedirectToAction("Index", "Tickets");
