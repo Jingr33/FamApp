@@ -27,6 +27,7 @@ namespace FamApp.Controllers
             List<Ticket> tickets = _db.Tickets.Include(t => t.CreatedByUser)
                                               .Include(t => t.UserTickets)
                                               .ThenInclude(ut => ut.User).ToList();
+            ViewData["UserId"] = _userManager.GetUserId(this.User);
             return View(tickets);
         }
 
@@ -52,6 +53,33 @@ namespace FamApp.Controllers
 
             _db.Tickets.Add(obj);
             _db.SaveChanges();
+            return RedirectToAction("Index", "Tickets");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var ticket = await this._db.Tickets.FindAsync(id) ?? throw new Exception("Ticket not found");
+                this._db.Tickets.Remove(ticket);
+                await _db.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Tickets");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Solve(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var ticket = await this._db.Tickets.FindAsync(id) ?? throw new Exception("Ticket not found");
+                ticket.Solved = true;
+                this._db.Tickets.Update(ticket);
+                await _db.SaveChangesAsync();
+            }
             return RedirectToAction("Index", "Tickets");
         }
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FamApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace FamApp.Areas.Identity.Data;
 
@@ -15,7 +16,10 @@ public class ApplicationUser : IdentityUser
     [Column(TypeName = "nvarchar(100)")]
     public string Nick {  get; set; }
 
-    public ICollection<Ticket> CreatedTickets { get; set; }
+    public string? Color { get; set; }
+
+    public ICollection<Ticket>? CreatedTickets { get; set; }
+
     public ICollection<UserTicket> UserTickets { get; set; } = new List<UserTicket>();
 }
 

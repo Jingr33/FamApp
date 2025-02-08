@@ -4,7 +4,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Vítejte!</h1>
-    <p>User Přezdívka: @Model.Nick @* @ViewData["UserID"] *@</p>
+    <p>Přezdívka: @Model.Nick</p>
 </div>
 
 <hr/>
@@ -19,15 +19,17 @@
     </div>
 
     <div class="row d-inline">
-        <form action="Update" method="post">
+        <form asp-action="Update" asp-controller="Home" method="post">
+            <input asp-for="Id" type="hidden"/>
             <div class="form-group mb-3">
                 <label asp-for="Nick">Moje přezdívka</label>
-                <input asp-for="Nick" class="form-control" value="@Model.Nick" placeholder="@Model.Nick"/>
+                <input asp-for="Nick" class="form-control input-small" placeholder="@Model.Nick"/>
             </div>
-            <div class="form-group mb3">
-                <label >Moje barva</label>
-                <input type="color" class="color-picker" />
+            <div class="form-group mb-3">
+                <label asp-for="Color">Moje barva</label>
+                <input name="Color" asp-for="Color" type="color" id="colorPicker" class="color-picker form-control form-control-color input-color" value="#abcdef"/>
             </div>
+            <button class="btn btn-primary px-5 my-2" type="submit">Změnit</button>
         </form>
     </div>
 </div>

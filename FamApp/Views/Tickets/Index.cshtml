@@ -1,4 +1,5 @@
-﻿@model List<Ticket>
+﻿@using FamApp.Helpers
+@model List<Ticket>
 
 
     <div class="container">
@@ -19,31 +20,45 @@
     <div class="container d-flex flex-wrap">
         @foreach (var one_tick in Model)
         {
+            @if (!one_tick.Public) {
+                bool createdByMe = one_tick.CreatedByUserId == ViewData["UserId"].ToString();
+                bool solvedByMe = one_tick.UserTickets.Select(ut => ut.User.Id).Contains(ViewData["UserId"].ToString());
+                @if (!createdByMe && !solvedByMe) {
+                    continue;
+                }
+            }
+
+            string hexColor = @one_tick.UserTickets.Select(ut => ut.User.Color).FirstOrDefault();
+            double highOpacity = 0.5;
+            double lowOpacity = 0.1;
+            string rgbaStrong = ColorHelpers.ConvertHexToRgba(hexColor, highOpacity);
+            string rgbaSoft = ColorHelpers.ConvertHexToRgba(hexColor, lowOpacity);
+
             <div class="col-md-6 col-lg-4 col-xl-3">
                 <div class="card m-2">
-                    <div class="card-header">
+                    <div class="card-header" style="background-color: @rgbaStrong;">
                         <div class="row">
                             <div class="col-9">
                                 <h4>@one_tick.Name</h4>
                             </div>
                             <div class="col-3 align-right d-flex justify-content-end">
-                            @if (!one_tick.Public)
-                            {
-                                <div data-toggle="tooltip" title="Veřejný ticket">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
-                                    </svg>
-                                </div>
-                            }
-                            @if (one_tick.Priority)
-                            {
-                                <div data-toggle="tooltip" title="Prioritní ticket">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
-                                        <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-                                    </svg>
-                                </div>
-                            }
-                        </div>
+                                @if (!one_tick.Public)
+                                {
+                                    <div data-toggle="tooltip" title="Veřejný ticket">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
+                                        </svg>
+                                    </div>
+                                }
+                                @if (one_tick.Priority)
+                                {
+                                    <div data-toggle="tooltip" title="Prioritní ticket">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
+                                            <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                                        </svg>
+                                    </div>
+                                }
+                            </div>
                         </div>
                         <div class="row">
                             <span class="align-right">
@@ -51,26 +66,65 @@
                             </span>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col py-2">
-                                @one_tick.Description
+                        <div class="card-body" style="background-color: @rgbaSoft;">
+                            <div class="row">
+                                <div class="col py-2">
+                                    @one_tick.Description
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    Pro:
+                                    <br />
+                                    @string.Join(", ", @one_tick.UserTickets.Select(ut => ut.User.Nick))
+                                </div>
+                                <div class="col-6 align-right">
+                                    Termín:
+                                    <br />
+                                    @if (one_tick.Solved == true)
+                                    {
+                                        <span class="text-success">Vyřešeno</span>
+                                    }
+                                    else
+                                        @one_tick.DeadLineDate?.ToString("dd.MM.yyyy")
+                                </div>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col">
+                                    @if (one_tick.UserTickets.Select(ut => ut.User.Id).Contains(ViewData["UserId"]))
+                                    {
+                                        <form method="post" asp-action="Solve" class="align-center">
+                                            <input type="hidden" name="id" value="@one_tick.Id" />
+                                            <button class="btn btn-success px-4" type="submit">Vyřešit</button>
+                                        </form>
+                                    }
+                                </div>
+                                <div class="col">
+                                    @if (one_tick.CreatedByUserId == ViewData["UserId"].ToString())
+                                    {
+                                        <form method="post" asp-action="Delete" class="align-center">
+                                            <input type="hidden" name="id" value="@one_tick.Id" />
+                                            <button class="btn btn-danger px-4" type="submit">Smazat</button>
+                                        </form>
+                                    }
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                Pro:
-                                <br />
-                                @string.Join(", ", @one_tick.UserTickets.Select(ut => ut.User.Nick))
-                            </div>
-                            <div class="col-6 align-right">
-                                Termín: 
-                                <br/>
-                                @one_tick.DeadLineDate?.ToString("dd.MM.yyyy")
-                            </div>
+                    @if (one_tick.Solved == true)
+                    {
+                        <div class="card-footer p-05 bg-success align-center">
+                            <span class="small-text uppercase text-light bold">Vyřešeno</span>
                         </div>
-                    
-                    </div>
+                    }
+                    else if (one_tick.DeadLineDate != null)
+                    {
+                        DateTime deadline = (DateTime)@one_tick.DeadLineDate;
+                        (string @message, string @bgColor) = DaysHelpers.DaysLeft(deadline);
+                        <div class="card-footer p-05 @bgColor align-center">
+                            <span class="small-text uppercase text-light bold">@message</span>
+                        </div>
+                    }
+
                 </div>
             </div>
         }

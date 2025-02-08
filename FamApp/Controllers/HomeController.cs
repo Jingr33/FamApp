@@ -25,14 +25,36 @@ namespace FamApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //ViewData["UserID"] = _userManager.GetUserId(this.User);
             var user = await _userManager.GetUserAsync(this.User);
             return View(user);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update([Bind("Id", "Nick", "Color")] ApplicationUser obj)
+        {   
+            if(ModelState.IsValid)
+            {
+                var user = await this._userManager.FindByIdAsync(obj.Id);
+
+                if (user == null)
+                    return NotFound();
+
+                user.Nick = obj.Nick;
+                user.Color = obj.Color;
+                Console.WriteLine($"##############################################################################x");
+                Console.WriteLine($"Color from form: {user.Color}");
+                Console.WriteLine($"##############################################################################x");
+
+                await this._userManager.UpdateAsync(user);
+                await this._db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                var reloadedObj = await _userManager.FindByIdAsync(obj.Id);
+                return View("Index", reloadedObj);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
