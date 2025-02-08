@@ -29,14 +29,12 @@
             }
 
             string hexColor = @one_tick.UserTickets.Select(ut => ut.User.Color).FirstOrDefault();
-            double highOpacity = 0.5;
-            double lowOpacity = 0.1;
-            string rgbaStrong = ColorHelpers.ConvertHexToRgba(hexColor, highOpacity);
+            double lowOpacity = 0.02;
             string rgbaSoft = ColorHelpers.ConvertHexToRgba(hexColor, lowOpacity);
 
             <div class="col-md-6 col-lg-4 col-xl-3">
                 <div class="card m-2">
-                    <div class="card-header" style="background-color: @rgbaStrong;">
+                    <div class="card-header card-header-bg">
                         <div class="row">
                             <div class="col-9">
                                 <h4>@one_tick.Name</h4>
@@ -66,6 +64,7 @@
                             </span>
                         </div>
                     </div>
+                    <div style="height: 5px; background-color: @hexColor;"></div>
                         <div class="card-body" style="background-color: @rgbaSoft;">
                             <div class="row">
                                 <div class="col py-2">
