@@ -1,12 +1,14 @@
 ﻿using FamApp.Areas.Identity.Data;
 using FamApp.Data;
 using FamApp.Models;
+using FamApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace FamApp.Controllers
 {
@@ -14,20 +16,24 @@ namespace FamApp.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly TicketService _ticketService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public TicketsController (ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public TicketsController (ApplicationDbContext db, TicketService ticketService, UserManager<ApplicationUser> userManager)
         {
             this._db = db;
+            this._ticketService = ticketService;
             this._userManager = userManager;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string? filter)
         {
-            List<Ticket> tickets = _db.Tickets.Include(t => t.CreatedByUser)
-                                              .Include(t => t.UserTickets)
-                                              .ThenInclude(ut => ut.User).ToList();
-            ViewData["UserId"] = _userManager.GetUserId(this.User);
+            string userId = _userManager.GetUserId(this.User) ?? throw new NullReferenceException("User not found");
+            List<Ticket> tickets = this._ticketService.FilterAndSort(userId, filter).ToList();
+            ViewData["UserId"] = userId;
+
+            ViewBag.Filter = filter;
             return View(tickets);
         }
 
@@ -38,21 +44,16 @@ namespace FamApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Ticket obj, List<string> SelectedUserIds)
+        public async Task<IActionResult> Create(Ticket obj, List<string> selectedUserIds)
         {
             obj.CreationDate = DateTime.Now;
             obj.CreatedByUserId = _userManager.GetUserId(this.User);
-
-            if (SelectedUserIds != null)
+            bool added = await this._ticketService.AddTicketAsync(obj, selectedUserIds);
+            
+            if (!added)
             {
-                obj.UserTickets = SelectedUserIds.Select(userId => new UserTicket
-                {
-                    UserId = userId,
-                }).ToList();
+                return NotFound();
             }
-
-            _db.Tickets.Add(obj);
-            _db.SaveChanges();
             return RedirectToAction("Index", "Tickets");
         }
 
@@ -62,9 +63,9 @@ namespace FamApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var ticket = await this._db.Tickets.FindAsync(id) ?? throw new Exception("Ticket not found");
-                this._db.Tickets.Remove(ticket);
-                await _db.SaveChangesAsync();
+                bool deleted = await this._ticketService.DeleteTicketAsync(id);
+                if (!deleted)
+                    return NotFound();
             }
             return RedirectToAction("Index", "Tickets");
         }
@@ -75,10 +76,11 @@ namespace FamApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var ticket = await this._db.Tickets.FindAsync(id) ?? throw new Exception("Ticket not found");
-                ticket.Solved = true;
-                this._db.Tickets.Update(ticket);
-                await _db.SaveChangesAsync();
+                bool updated =  await this._ticketService.SolveTicketAsync(id);
+                if (!updated)
+                {
+                    return NotFound();
+                }
             }
             return RedirectToAction("Index", "Tickets");
         }

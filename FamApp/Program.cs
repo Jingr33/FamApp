@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FamApp.Interfaces;
+using FamApp.Repositories;
+using FamApp.Services;
 using FamApp.Data;
 using FamApp.Areas.Identity.Data;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +20,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<TicketService>();
 
 var app = builder.Build();
 
@@ -36,6 +42,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Tickets}/{action=Index}/{id?}");
+});
+
+
 app.MapRazorPages();
 
 app.Run();
