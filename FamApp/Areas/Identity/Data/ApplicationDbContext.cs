@@ -29,13 +29,13 @@ public class ApplicationDbContext : IdentityDbContext<Areas.Identity.Data.Applic
             .HasOne(ut => ut.User)
             .WithMany(u => u.UserTickets)
             .HasForeignKey(ut => ut.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<UserTicket>()
            .HasOne(ut => ut.Ticket)
            .WithMany(t => t.UserTickets)
            .HasForeignKey(ut => ut.TicketId)
-           .OnDelete(DeleteBehavior.NoAction);
+           .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Ticket>()
             .HasOne(t => t.CreatedByUser)

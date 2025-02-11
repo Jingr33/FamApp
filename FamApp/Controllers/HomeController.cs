@@ -42,10 +42,6 @@ namespace FamApp.Controllers
 
                 user.Nick = obj.Nick;
                 user.Color = obj.Color;
-                Console.WriteLine($"##############################################################################x");
-                Console.WriteLine($"Color from form: {user.Color}");
-                Console.WriteLine($"##############################################################################x");
-
                 await this._userManager.UpdateAsync(user);
                 await this._db.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
