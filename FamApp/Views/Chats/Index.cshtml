@@ -1,0 +1,16 @@
+﻿@using FamApp.ViewModels
+@model IEnumerable<ChatViewModel>
+
+<div class="container">
+    <div class="col-3 chat-container">
+        @foreach (var chat in Model)
+        {
+            <a asp-action="Chat" asp-route-id="@chat.Id">
+                @chat.Name
+            </a>
+        }
+    </div>
+    <div class="col-9 message-container">
+        @RenderBody()
+    </div>
+</div>

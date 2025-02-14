@@ -21,5 +21,9 @@ public class ApplicationUser : IdentityUser
     public ICollection<Ticket>? CreatedTickets { get; set; }
 
     public ICollection<UserTicket> UserTickets { get; set; } = new List<UserTicket>();
+
+    public ICollection<ChatUser> ChatUsers { get; set; }
+
+    public ICollection<Message> Messages { get; set; }
 }
 

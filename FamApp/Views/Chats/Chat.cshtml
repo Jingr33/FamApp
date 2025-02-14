@@ -1,0 +1,37 @@
+﻿@using FamApp.ViewModels
+@model ChatViewModel
+
+<h2>@Model.Name</h2>
+
+<div id="chat-message">
+    @foreach (var message in Model.Messages)
+    {
+        <p>
+            <span>@message.Sender</span>
+            <strong>@message.Content</strong>
+            <i>@message.SentAt</i>
+        </p>
+    }
+</div>
+
+<input type="text" id="messageInut" placeholder="Zpráva" />
+<button class="btn btn-primary" onclick="SendMessage()">Odeslat</button>
+
+<script src="~/js/signalr.js"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+
+    connection.start().then(function () {
+        connection.invoke("JoinChat", "@Model.Id");
+    });
+
+    connection.on("ReceiveMessage", function (sender, content) {
+        var msg = `<p><strong>${sender}:</strong> ${content}</p>`;
+        document.getElementById("chatMessages").innerHTML += msg;
+    });
+
+    function sendMessage() {
+        var content = document.getElementById("messageInput").value;
+        connection.invoke("SendMessage", @Model.Id, "@User.Identity.Name", content);
+    }
+</script>

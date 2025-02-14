@@ -5,6 +5,7 @@ using FamApp.Repositories;
 using FamApp.Services;
 using FamApp.Data;
 using FamApp.Areas.Identity.Data;
+using FamApp.Hubs;
 
 
 
@@ -22,8 +23,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<TicketService>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -48,6 +53,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Tickets}/{action=Index}/{id?}");
+    endpoints.MapHub<ChatHub>("/chatHub");
 });
 
 
