@@ -1,4 +1,5 @@
-﻿using FamApp.Data;
+﻿using FamApp.Areas.Identity.Data;
+using FamApp.Data;
 using FamApp.Interfaces;
 using FamApp.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,18 @@ namespace FamApp.Repositories
             return await this._db.Chat
                 .Include(c => c.Messages)
                 .FirstOrDefaultAsync(c => c.Id == chatId);
+        }
+
+        public async Task AddChatAsync(Chat chat, List<string> userIds)
+        {
+            this._db.Chat.Add(chat);
+            await this._db.SaveChangesAsync();
+
+            foreach (var userId in userIds)
+            {
+                this._db.ChatUser.Add(new ChatUser { ChatId = chat.Id, UserId = userId });
+            }
+            this._db.SaveChanges();
         }
     }
 }

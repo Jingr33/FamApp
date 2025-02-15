@@ -1,15 +1,20 @@
-﻿using FamApp.Interfaces;
+﻿using AutoMapper;
+using FamApp.Areas.Identity.Data;
+using FamApp.Interfaces;
 using FamApp.Models;
+using FamApp.ViewModels;
 
 namespace FamApp.Services
 {
     public class ChatService : IChatService
     {
         private readonly IChatRepository _chatRepo;
+        private readonly IMapper _mapper;
 
-        public ChatService(IChatRepository chatRepo)
+        public ChatService(IChatRepository chatRepo, IMapper mapper)
         {
             this._chatRepo = chatRepo;
+            this._mapper = mapper;
         }
 
         public async Task<Chat> GetChatByIdAsync(int chatId)
@@ -32,6 +37,14 @@ namespace FamApp.Services
                 SentAt = DateTime.UtcNow,
             };
             await this._chatRepo.AddMessageAsync(message);
+        }
+
+        public async Task AddChatAsync (CreateChatViewModel model, string thisUserId)
+        {
+            model.SelectedUserIds.Add(thisUserId);
+            Chat chat = this._mapper.Map<Chat>(model);
+            chat.IsGroup = model.SelectedUserIds.Count > 1 ? true : false;
+            await this._chatRepo.AddChatAsync(chat, model.SelectedUserIds);
         }
     }
 }

@@ -279,3 +279,5 @@ C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\
 C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
 C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

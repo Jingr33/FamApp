@@ -4,18 +4,21 @@
 <h2>@Model.Name</h2>
 
 <div id="chat-message">
-    @foreach (var message in Model.Messages)
+    @if (Model.Messages != null && Model.Messages.Count != 0)
     {
+        @foreach (var message in Model.Messages)
+        {
         <p>
             <span>@message.Sender</span>
             <strong>@message.Content</strong>
             <i>@message.SentAt</i>
         </p>
+        }
     }
 </div>
 
-<input type="text" id="messageInut" placeholder="Zpráva" />
-<button class="btn btn-primary" onclick="SendMessage()">Odeslat</button>
+<input type="text" id="messageInput" placeholder="Zpráva" />
+<button class="btn btn-primary" onclick="sendMessage()">Odeslat</button>
 
 <script src="~/js/signalr.js"></script>
 <script>
@@ -23,11 +26,22 @@
 
     connection.start().then(function () {
         connection.invoke("JoinChat", "@Model.Id");
+    }).catch(function (err) {
+        console.error("SignalR připojení selhalo", err);
     });
+
 
     connection.on("ReceiveMessage", function (sender, content) {
         var msg = `<p><strong>${sender}:</strong> ${content}</p>`;
-        document.getElementById("chatMessages").innerHTML += msg;
+        $("#chat-message").append(msg);
+    });
+
+    connection.onclose(function (error) {
+        if (error) {
+            console.error('Chyba při ukončení připojení: ', error);
+        } else {
+            console.log('Připojení bylo uzavřeno.');
+        }
     });
 
     function sendMessage() {

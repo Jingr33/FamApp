@@ -25,6 +25,7 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSignalR();
 
 var app = builder.Build();

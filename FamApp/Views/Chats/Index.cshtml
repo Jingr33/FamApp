@@ -2,15 +2,49 @@
 @model IEnumerable<ChatViewModel>
 
 <div class="container">
-    <div class="col-3 chat-container">
-        @foreach (var chat in Model)
-        {
-            <a asp-action="Chat" asp-route-id="@chat.Id">
-                @chat.Name
-            </a>
-        }
-    </div>
-    <div class="col-9 message-container">
-        @RenderBody()
+    <div class="row">
+        <div class="col-3 chat-container">
+            <div class="row px-3 py-1">
+                <a asp-action="CreateChat" class="btn btn-primary">Vytvořit nový chat</a>
+            </div>
+            <div class="row">
+                @foreach (var chat in Model)
+                {
+                    <a class="chat-link" href="#" @* asp-action="Chat" asp-route-chatId="@chat.Id" *@ data-url="@Url.Action("Chat", "Chats", new { chatId = chat.Id})">
+                        @chat.Name
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="col-9 message-container" id="chatContent">
+            <p>Zatím tu nic není</p>
+        </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        console.log("Skript běží!");
+
+        $(document).on("click", ".chat-link", function (e) {
+            e.preventDefault();
+
+            var chatUrl = $(this).data("url");
+            console.log("Kliknuto na chat, URL:", chatUrl);
+
+            if (!chatUrl) {
+                console.error("Chyba: data-url není nastaveno!");
+                return;
+            }
+
+            $("#chatContent").load(chatUrl, function (response, status, xhr) {
+                if (status === "error") {
+                    console.error("Chyba AJAX:", xhr.status, xhr.statusText);
+                } else {
+                    console.log("Chat úspěšně načten.");
+                }
+            });
+        });
+    });
+</script>

@@ -1,4 +1,5 @@
 ﻿using FamApp.Models;
+using FamApp.ViewModels;
 
 namespace FamApp.Interfaces
 {
@@ -7,5 +8,6 @@ namespace FamApp.Interfaces
         Task<Chat> GetChatByIdAsync(int chatId);
         Task<IEnumerable<Chat>> GetUserChatsAsync(string userId);
         Task SendMessageAsync(int chatId, string senderId, string message);
+        Task AddChatAsync(CreateChatViewModel model, string thisUserId);
     }
 }
