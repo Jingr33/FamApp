@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "lBWdPBZ5RNinHGm8XgehKnj1mH4kLRCZUMNg/E7EwD4=",
+  "Hash": "XHBips42lg4OYuKH1wf6wu4aT9IEtQtJrOmeJv84XsE=",
   "Source": "FamApp",
   "BasePath": "_content/FamApp",
   "Mode": "Default",
@@ -1231,6 +1231,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\js\\chat.js",
+      "SourceId": "FamApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\",
+      "BasePath": "_content/FamApp",
+      "RelativePath": "js/chat.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\chat.js"
     },
     {
       "Identity": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\js\\signalr.js",

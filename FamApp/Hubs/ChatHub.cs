@@ -13,39 +13,14 @@ namespace FamApp.Hubs
             this._chatService = chatService;
         }
 
-        public async Task SendMessage(int chatId, string senderId, string message)
+        public async Task JoinChat(string chatId)
         {
-            try
-            {
-                await this._chatService.SendMessageAsync(chatId, senderId, message);
-                await Clients.Group(chatId.ToString()).SendAsync("RecieveMessage", senderId, message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("#############################################################");
-                Console.WriteLine($"Chyba při odesílání zprávy: {ex.Message}");
-                Console.WriteLine("#############################################################");
-            }
+            await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
         }
 
-        public async Task JoinChat (string chatId)
+        public async Task SendMessage(string chatId, string user, string message)
         {
-            try
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("#############################################################");
-                Console.WriteLine($"Chyba při připojování do chatu: {ex.Message}");
-                Console.WriteLine("#############################################################");
-            }
-
-        }
-
-        public async Task LeaveChat (string chatId)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId);
+            await Clients.Group(chatId).SendAsync("ReceiveMessage", user, message);
         }
     }
 }

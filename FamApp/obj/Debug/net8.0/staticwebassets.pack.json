@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\js\\chat.js",
+      "PackagePath": "staticwebassets\\js\\chat.js"
+    },
+    {
       "Id": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\js\\signalr.js",
       "PackagePath": "staticwebassets\\js\\signalr.js"
     },
