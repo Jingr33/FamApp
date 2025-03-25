@@ -2,3 +2,4 @@
 FamApp/bin
 FamApp/obj
 FamApp/FamApp.sln
+FamApp/Migrations/*_init.*

@@ -1,8 +1,7 @@
-﻿using FamApp.Areas.Identity.Data;
-using FamApp.Data;
+﻿using FamApp.Data;
 using FamApp.Interfaces;
 using FamApp.Models;
-using Microsoft.AspNetCore.Mvc;
+using FamApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FamApp.Repositories
@@ -19,14 +18,27 @@ namespace FamApp.Repositories
         public async Task AddMessageAsync(Message message)
         {
             this._db.Message.Add(message);
-            await this._db.SaveChangesAsync();
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"[INNER] {ex.InnerException.Message}");
+                }
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Chat>> GetUserChatsAsync(string userId)
         {
-            return await this._db.ChatUser
-                .Where(uc => uc.UserId == userId)
-                .Select(uc => uc.Chat)
+            return await this._db.Chat
+                .Where(c => c.UserChats.Any(uc => uc.UserId == userId))
+                .Include(c => c.Messages)
+                .Include(c => c.UserChats).ThenInclude(uc => uc.User)
                 .ToListAsync();
         }
 
@@ -47,6 +59,23 @@ namespace FamApp.Repositories
                 this._db.ChatUser.Add(new ChatUser { ChatId = chat.Id, UserId = userId });
             }
             this._db.SaveChanges();
+        }
+
+        public async Task<List<MessageViewModel>> GetMessageForChatAsync(int chatId)
+        {
+            //return await _db.Message.Where(m => m.ChatId == chatId).OrderBy(m => m.SentAt).ToListAsync();
+            return await _db.Message
+            .Where(m => m.ChatId == chatId)
+            .Include(m => m.Sender)
+            .OrderBy(m => m.SentAt)
+            .Select(m => new MessageViewModel
+            {
+                Content = m.Content,
+                SenderId = m.SenderId,
+                SenderNick = m.Sender.Nick,
+                SentAt = m.SentAt.ToString("HH:mm dd.MM")
+            })
+            .ToListAsync();
         }
     }
 }

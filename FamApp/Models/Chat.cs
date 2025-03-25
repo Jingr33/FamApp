@@ -1,4 +1,6 @@
-﻿namespace FamApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FamApp.Models
 {
     public class Chat
     {

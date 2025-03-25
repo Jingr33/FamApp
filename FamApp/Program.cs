@@ -26,7 +26,11 @@ builder.Services.AddScoped<TicketService>();
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddSignalR();
+builder.Logging.AddConsole();
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 
 var app = builder.Build();
 
@@ -43,6 +47,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
+app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -57,6 +62,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapHub<ChatHub>("/chatHub");
 });
+
 
 
 app.MapRazorPages();

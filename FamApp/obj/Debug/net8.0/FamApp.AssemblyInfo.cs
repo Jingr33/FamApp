@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FamApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+908c839c5efa5d5efdbb768f6f9684371a249a79")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+128d44cd38cd936034a340fccb95c8a6bbcfcf9d")]
 [assembly: System.Reflection.AssemblyProductAttribute("FamApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FamApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

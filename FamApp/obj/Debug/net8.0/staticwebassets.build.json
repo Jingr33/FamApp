@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "XHBips42lg4OYuKH1wf6wu4aT9IEtQtJrOmeJv84XsE=",
+  "Hash": "Fd3Va0wX/11bdCIs/1UfP1Znu+tN3sIzWGmJ9uNh/6A=",
   "Source": "FamApp",
   "BasePath": "_content/FamApp",
   "Mode": "Default",
@@ -1193,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\FamApp.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\css\\chat.css",
+      "SourceId": "FamApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\",
+      "BasePath": "_content/FamApp",
+      "RelativePath": "css/chat.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\chat.css"
     },
     {
       "Identity": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\css\\site.css",

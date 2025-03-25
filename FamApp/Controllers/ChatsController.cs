@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using NuGet.Configuration;
 using System.Security.Claims;
 
 namespace FamApp.Controllers
@@ -30,7 +28,14 @@ namespace FamApp.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("Uživatel nenalezen");
             var chats = await this._chatService.GetUserChatsAsync(userId);
-            IEnumerable<ChatViewModel> chatViewModels = this._mapper.Map<IEnumerable<ChatViewModel>>(chats);
+            var chatViewModels = this._mapper.Map<List<ChatViewModel>>(chats);
+
+            foreach (var (chatVM, chatEntity) in chatViewModels.Zip(chats, (vm, entity) => (vm, entity)))
+            {
+                chatVM.Participants = chatEntity.UserChats?.Where(cu => cu.User != null).Select(cu => cu.User.UserName).ToList();
+                chatVM.Messages = chatEntity.Messages?.ToList() ?? new List<Message>();
+            }
+
             return View(chatViewModels);
         }
 
@@ -42,7 +47,11 @@ namespace FamApp.Controllers
             {
                 return NotFound();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+
             var chatViewModel = this._mapper.Map<ChatViewModel>(chat);
+            chatViewModel.CurrentUser = user.Id;
             return PartialView("Chat", chatViewModel);
         }
 
@@ -66,6 +75,13 @@ namespace FamApp.Controllers
 
             await this._chatService.AddChatAsync(model, thisUserId);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet("GetMessages")]
+        public async Task<IActionResult> GetMessages(int chatId)
+        {
+            var messageDtos = await _chatService.GetMessagesForChat(chatId);
+            return Json(messageDtos);
         }
     }
 }

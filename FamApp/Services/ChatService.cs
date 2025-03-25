@@ -32,9 +32,9 @@ namespace FamApp.Services
             var message = new Message
             {
                 Content = content,
+                SentAt = DateTime.UtcNow,
                 ChatId = chatId,
                 SenderId = senderId,
-                SentAt = DateTime.UtcNow,
             };
             await this._chatRepo.AddMessageAsync(message);
         }
@@ -45,6 +45,11 @@ namespace FamApp.Services
             Chat chat = this._mapper.Map<Chat>(model);
             chat.IsGroup = model.SelectedUserIds.Count > 1 ? true : false;
             await this._chatRepo.AddChatAsync(chat, model.SelectedUserIds);
+        }
+
+        public async Task<List<MessageViewModel>> GetMessagesForChat(int chatId)
+        {
+            return await _chatRepo.GetMessageForChatAsync(chatId);
         }
     }
 }

@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\FamApp.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\css\\chat.css",
+      "PackagePath": "staticwebassets\\css\\chat.css"
+    },
+    {
       "Id": "C:\\Users\\jirka\\Documents\\Jirka\\Programování\\C#\\FamApp\\FamApp\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

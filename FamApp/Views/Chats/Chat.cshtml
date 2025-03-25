@@ -4,21 +4,26 @@
 <script src="~/js/signalr.js"></script>
 <script src="~/js/chat.js"></script>
 
-<h2>@Model.Name</h2>
 
-<div id="messages">
-    @if (Model.Messages != null && Model.Messages.Count != 0)
-    {
-        @foreach (var message in Model.Messages)
-        {
-        <p>
-            <span>@message.Sender</span>
-            <strong>@message.Content</strong>
-            <i>@message.SentAt</i>
-        </p>
-        }
-    }
+<div class="container px-0  mx-0 message-box">
+    <div class="message-box-header">
+        <h2>@Model.Name</h2>
+    </div>
+
+    <div id="messages">
+    </div>
+
+    <div id="message-input" class="row">
+        <div class="col">
+            <input type="hidden" id="chatId" value="@Model.Id" />
+            <input class="message-text" type="text" id="messageInput" placeholder="Zpráva" />
+        </div>
+        <div class="col-auto send-button">
+            <button id="send-button" class="btn btn-primary" type="button" onclick="sendMessage()">Odeslat</button>
+        </div>
+    </div>
 </div>
 
-<input type="text" id="messageInput" placeholder="Zpráva" />
-<button class="btn btn-primary" onclick="sendMessage()">Odeslat</button>
+<script>
+    window.currentUser = "@Model.CurrentUser"
+</script>

@@ -9,5 +9,6 @@ namespace FamApp.Interfaces
         Task<IEnumerable<Chat>> GetUserChatsAsync(string userId);
         Task SendMessageAsync(int chatId, string senderId, string message);
         Task AddChatAsync(CreateChatViewModel model, string thisUserId);
+        Task<List<MessageViewModel>> GetMessagesForChat(int chatId);
     }
 }

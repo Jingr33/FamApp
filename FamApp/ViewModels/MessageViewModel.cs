@@ -3,7 +3,8 @@
     public class MessageViewModel
     {
         public string Content { get; set; }
-        public string SendAt { get; set; }
-        public string Sender { get; set; }
+        public string SenderId { get; set; }
+        public string SenderNick { get; set; }
+        public string SentAt { get; set; }
     }
 }

@@ -1,23 +1,50 @@
 ﻿@using FamApp.ViewModels
 @model IEnumerable<ChatViewModel>
 
-<div class="container">
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+}
+
+<div id="chat" class="container">
     <div class="row">
+        <div>
+            <h3></h3>
+            <span></span>
+        </div>
         <div class="col-3 chat-container">
-            <div class="row px-3 py-1">
-                <a asp-action="CreateChat" class="btn btn-primary">Vytvořit nový chat</a>
+            <div class="row px-3 underline">
+                <a asp-action="CreateChat" class="btn btn-outline-primary">Vytvořit nový chat</a>
             </div>
-            <div class="row">
+            <div class="row chat-group">
                 @foreach (var chat in Model)
                 {
-                    <a class="chat-link" href="#" @* asp-action="Chat" asp-route-chatId="@chat.Id" *@ data-url="@Url.Action("Chat", "Chats", new { chatId = chat.Id})">
-                        @chat.Name
+                    <a class="chat-link" href="#" data-url="@Url.Action("Chat", "Chats", new { chatId = chat.Id})">
+                        <div class="row">
+                            <h4>@chat.Name</h4>
+                        </div>
+                        <div class="row">
+                            @if (chat.Messages != null && chat.Messages.Count > 0)
+                            {
+                                var lastMessage = chat.Messages.Last();
+                                var lastMessageContent = lastMessage.Content.Length > 18 ? lastMessage.Content[..21] + "..." : lastMessage.Content;
+                                <div class="col">
+                                    <span>@lastMessageContent</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span>@lastMessage.SentAt.ToString("HH:mm dd.MM.")</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <span>Žádné zprávy</span>
+                            }
+                        </div>
                     </a>
                 }
             </div>
         </div>
-        <div class="col-9 message-container" id="chatContent">
-            <p>Zatím tu nic není</p>
+        <div class="col-9" id="chat-content">
+            <p>Zatím tu nic není...</p>
         </div>
     </div>
 </div>
@@ -38,7 +65,7 @@
                 return;
             }
 
-            $("#chatContent").load(chatUrl, function (response, status, xhr) {
+            $("#chat-content").load(chatUrl, function (response, status, xhr) {
                 if (status === "error") {
                     console.error("Chyba AJAX:", xhr.status, xhr.statusText);
                 } else {
