@@ -3,6 +3,7 @@ using FamApp.Areas.Identity.Data;
 using FamApp.Interfaces;
 using FamApp.Models;
 using FamApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,9 +25,10 @@ namespace FamApp.Controllers
             this._userManager = userManager;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("Uživatel nenalezen");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("User not found");
             var chats = await this._chatService.GetUserChatsAsync(userId);
             var chatViewModels = this._mapper.Map<List<ChatViewModel>>(chats);
 

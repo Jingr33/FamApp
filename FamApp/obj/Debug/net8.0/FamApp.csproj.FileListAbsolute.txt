@@ -290,3 +290,4 @@ C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\
 C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\System.Net.ServerSentEvents.dll
 C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\bin\Debug\net8.0\System.Threading.Channels.dll
+C:\Users\jirka\Documents\Jirka\Programování\C#\FamApp\FamApp\obj\Debug\net8.0\FamApp.sourcelink.json
