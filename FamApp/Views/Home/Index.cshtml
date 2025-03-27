@@ -22,7 +22,10 @@
     {
         <div class="alert alert-success">@TempData["SuccessMessagePersonal"]</div>
     }
-
+    else if (TempData["FailureMessagePersonal"] != null)
+    {
+        <div class="alert alert-danger">@TempData["FailureMessagePersonal"]</div>
+    }
 
     <div class="row d-inline">
         <form asp-action="UpdatePersonalData" asp-controller="Home" method="post">
@@ -52,6 +55,10 @@
     @if (TempData["SuccessMessagePassword"] != null)
     {
         <div class="alert alert-success">@TempData["SuccessMessagePassword"]</div>
+    }
+    else if(TempData["FailureMessagePassword"] != null)
+    {
+        <div class="alert alert-danger">@TempData["FailureMessagePassword"]</div>
     }
 
     <div class="row d-inline">

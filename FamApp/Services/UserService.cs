@@ -1,4 +1,5 @@
-﻿using FamApp.Interfaces;
+﻿using FamApp.Areas.Identity.Data;
+using FamApp.Interfaces;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -36,6 +37,26 @@ namespace FamApp.Services
             user.Nick = model.Nick;
             user.Color = model.Color;
             return await _userRepository.UpdateUserAsync(user);
+        }
+
+        public async Task<ApplicationUser?> GetCurrentUserAsync()
+        {
+            return await _userRepository.GetCurrentUserAsync();
+        }
+
+        public async Task<ApplicationUser?> ChangePasswordAsync(ChangePasswordViewModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+                return null;
+
+            var result = await _userRepository.ChangePasswordAsync(user, model);
+            return result.Succeeded ? user : null;
+        }
+
+        public async Task RefreshSignInAsync(ApplicationUser user)
+        {
+            await _userRepository.RefreshSignInAsync(user);
         }
     }
 }
