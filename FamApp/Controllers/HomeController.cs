@@ -1,4 +1,5 @@
 using FamApp.Data;
+using FamApp.Interfaces;
 using FamApp.Models;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,16 +17,18 @@ namespace FamApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
 
         public HomeController(ILogger<HomeController> logger,
                               UserManager<ApplicationUser> userManager,
                               SignInManager<ApplicationUser> signInManager,
-                              ApplicationDbContext db)
+                              ApplicationDbContext db, IUserService userService)
         {
             _logger = logger;
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._db = db;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
@@ -36,26 +39,32 @@ namespace FamApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePersonalData([Bind("Id", "Nick", "Color")] ApplicationUser obj)
+        public async Task<IActionResult> UpdatePersonalData(UpdatePersonalDataViewModel model)
         {   
-            if(ModelState.IsValid)
-            {
-                var user = await this._userManager.FindByIdAsync(obj.Id);
+            if(!ModelState.IsValid)
+                return View("Index", model);
 
-                if (user == null)
-                    return NotFound();
+            var user = await this._userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return NotFound();
 
-                user.Nick = obj.Nick;
-                user.Color = obj.Color;
-                await this._userManager.UpdateAsync(user);
-                await this._db.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
-            }
-            else
+            //if (user == null)
+            //    return NotFound();
+
+            //user.Nick = model.Nick;
+            //user.Color = model.Color;
+            //var result = await _userManager.UpdateAsync(user);
+
+            var result = await _userService.UpdateUserAsync(model);
+
+            if (result)
             {
-                var reloadedObj = await _userManager.FindByIdAsync(obj.Id);
-                return View("Index", reloadedObj);
+                TempData["SuccessMessagePersonal"] = "Údaje byly úspìšnì aktualizovány!";
+                return RedirectToAction("Index");
             }
+
+            ModelState.AddModelError("", "Údaje se nepodaøilo aktualizovat.");
+            return View("Index", user);
         }
 
         [HttpPost]
@@ -66,12 +75,15 @@ namespace FamApp.Controllers
                 return View("Index", model);
 
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return NotFound();
+
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
             if (result.Succeeded)
             {
                 await _signInManager.RefreshSignInAsync(user);
-                TempData["SuccessMessage"] = "Heslo bylo úspìšnì zmìnìno!";
+                TempData["SuccessMessagePassword"] = "Heslo bylo úspìšnì zmìnìno!";
                 return RedirectToAction("Index");
             }
 

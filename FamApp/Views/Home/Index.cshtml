@@ -18,6 +18,12 @@
         </div>
     </div>
 
+    @if (TempData["SuccessMessagePersonal"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessagePersonal"]</div>
+    }
+
+
     <div class="row d-inline">
         <form asp-action="UpdatePersonalData" asp-controller="Home" method="post">
             <input asp-for="Id" type="hidden"/>
@@ -43,9 +49,9 @@
         </div>
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
+    @if (TempData["SuccessMessagePassword"] != null)
     {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        <div class="alert alert-success">@TempData["SuccessMessagePassword"]</div>
     }
 
     <div class="row d-inline">
