@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FamApp.Models;
+﻿using FamApp.Models;
 
 
 namespace FamApp.Interfaces

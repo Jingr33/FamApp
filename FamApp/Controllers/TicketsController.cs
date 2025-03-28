@@ -1,35 +1,31 @@
 ﻿using FamApp.Areas.Identity.Data;
 using FamApp.Data;
+using FamApp.Interfaces;
 using FamApp.Models;
-using FamApp.Services;
+using FamApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace FamApp.Controllers
 {
     [Authorize]
     public class TicketsController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        private readonly TicketService _ticketService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITicketService _ticketService;
+        private readonly IUserService _userService;
 
-        public TicketsController (ApplicationDbContext db, TicketService ticketService, UserManager<ApplicationUser> userManager)
+        public TicketsController (ITicketService ticketService,
+                                  IUserService userService)
         {
-            this._db = db;
-            this._ticketService = ticketService;
-            this._userManager = userManager;
+            _ticketService = ticketService;
+            _userService = userService;
         }
 
         [HttpGet]
-        public IActionResult Index(string? filter)
+        public async Task<IActionResult> Index(string? filter)
         {
-            string userId = _userManager.GetUserId(this.User) ?? throw new NullReferenceException("User not found");
+            var user = await _userService.GetCurrentUserAsync();
+            string userId = await _userService.GetUserIdAsync(user);
             List<Ticket> tickets = this._ticketService.FilterAndSort(userId, filter).ToList();
             ViewData["UserId"] = userId;
 
@@ -37,17 +33,21 @@ namespace FamApp.Controllers
             return View(tickets);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["Users"] = new SelectList(_db.Users, "Id", "Nick");
-            return View();
+            var model = new CreateTicketViewModel
+            {
+                Users = await _userService.GetUserSelectListAsync()
+            };
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Ticket obj, List<string> selectedUserIds)
         {
             obj.CreationDate = DateTime.Now;
-            obj.CreatedByUserId = _userManager.GetUserId(this.User);
+            var user = await _userService.GetCurrentUserAsync();
+            obj.CreatedByUserId = await _userService.GetUserIdAsync(user);
             bool added = await this._ticketService.AddTicketAsync(obj, selectedUserIds);
             
             if (!added)

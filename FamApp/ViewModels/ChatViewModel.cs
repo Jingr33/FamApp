@@ -1,5 +1,4 @@
 ﻿using FamApp.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FamApp.ViewModels
 {

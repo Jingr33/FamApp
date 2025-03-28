@@ -1,6 +1,7 @@
-﻿using FamApp.Models;
+﻿using FamApp.Areas.Identity.Data;
+using FamApp.Models;
 using FamApp.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FamApp.Interfaces
 {
@@ -9,7 +10,7 @@ namespace FamApp.Interfaces
         Task<Chat> GetChatByIdAsync(int chatId);
         Task<IEnumerable<Chat>> GetUserChatsAsync(string userId);
         Task AddMessageAsync(Message message);
-        Task AddChatAsync(Chat chat, List<string> userIds);
+        Task AddChatAsync(Chat chat, List<ApplicationUser> users);
         Task<List<MessageViewModel>> GetMessageForChatAsync(int chatId);
     }
 }

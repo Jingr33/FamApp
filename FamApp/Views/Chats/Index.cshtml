@@ -66,6 +66,8 @@
             }
 
             $("#chat-content").load(chatUrl, function (response, status, xhr) {
+                console.log(response)
+
                 if (status === "error") {
                     console.error("Chyba AJAX:", xhr.status, xhr.statusText);
                 } else {

@@ -3,6 +3,7 @@ using FamApp.Data;
 using FamApp.Interfaces;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace FamApp.Repositories
 {
@@ -48,6 +49,21 @@ namespace FamApp.Repositories
         public async Task RefreshSignInAsync(ApplicationUser user)
         {
             await _signInManager.RefreshSignInAsync(user);
+        }
+
+        public async Task<string> GetUserIdAsync(ApplicationUser user)
+        {
+            return await _userManager.GetUserIdAsync(user);
+        }
+
+        public async Task<List<ApplicationUser>> GetAllUsersAsync()
+        {
+            return await _db.Users.ToListAsync();
+        }
+
+        public async Task<List<ApplicationUser>> GetUsersByIdsAsync(List<string> userIds)
+        {
+            return await _db.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
         }
     }
 }

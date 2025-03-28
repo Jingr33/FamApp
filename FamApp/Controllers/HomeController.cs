@@ -1,11 +1,8 @@
-using FamApp.Data;
 using FamApp.Interfaces;
-using FamApp.Models;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using ApplicationUser = FamApp.Areas.Identity.Data.ApplicationUser;
 
 namespace FamApp.Controllers
@@ -29,7 +26,6 @@ namespace FamApp.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userService.GetCurrentUserAsync();
-            //var user = await _userManager.GetCurrentUserAsync(this.User);
             return View(user);
         }
 

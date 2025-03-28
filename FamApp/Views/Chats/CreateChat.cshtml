@@ -10,16 +10,18 @@
 
         <div class="form-group py-3">
             <label for="users">Účastníci chatu</label>
-            <select name="SelectedUserIds" class="form-control" multiple="multiple">
-                @foreach (var user in ViewBag.Users as SelectList) 
+            <select name="Users" class="form-control" multiple="multiple">
+                @foreach (var user in Model.Users) 
                 {
-                    @if (user.Value != ViewBag.ThisUserId)
+                    @if (user.Value != Model.CurrentUserId)
                     {
                         <option value="@user.Value">@user.Text</option>
                     }
                 }
             </select>
         </div>
+
+        <input type="hidden" asp-for="CurrentUserId" />
 
         <div class="d-flex justify-content-center">
             <div class="col-6">

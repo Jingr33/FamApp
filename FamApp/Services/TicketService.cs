@@ -1,10 +1,9 @@
 ﻿using FamApp.Interfaces;
 using FamApp.Models;
-using Microsoft.Data.SqlClient;
 
 namespace FamApp.Services
 {
-    public class TicketService
+    public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepo;
 

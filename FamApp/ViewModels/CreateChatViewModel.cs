@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace FamApp.ViewModels
 {
@@ -6,7 +7,9 @@ namespace FamApp.ViewModels
     {
         public string Name { get; set; }
 
+        public string? CurrentUserId { get; set; }
+
         [Required]
-        public List<string> SelectedUserIds { get; set; }
+        public List<SelectListItem>? Users { get; set; }
     }
 }

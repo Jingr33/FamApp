@@ -1,7 +1,9 @@
-﻿using FamApp.Data;
+﻿using FamApp.Areas.Identity.Data;
+using FamApp.Data;
 using FamApp.Interfaces;
 using FamApp.Models;
 using FamApp.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace FamApp.Repositories
@@ -49,21 +51,20 @@ namespace FamApp.Repositories
                 .FirstOrDefaultAsync(c => c.Id == chatId);
         }
 
-        public async Task AddChatAsync(Chat chat, List<string> userIds)
+        public async Task AddChatAsync(Chat chat, List<ApplicationUser> users)
         {
             this._db.Chat.Add(chat);
             await this._db.SaveChangesAsync();
 
-            foreach (var userId in userIds)
+            foreach (var user in users)
             {
-                this._db.ChatUser.Add(new ChatUser { ChatId = chat.Id, UserId = userId });
+                this._db.ChatUser.Add(new ChatUser { ChatId = chat.Id, UserId = user.Id });
             }
             this._db.SaveChanges();
         }
 
         public async Task<List<MessageViewModel>> GetMessageForChatAsync(int chatId)
         {
-            //return await _db.Message.Where(m => m.ChatId == chatId).OrderBy(m => m.SentAt).ToListAsync();
             return await _db.Message
             .Where(m => m.ChatId == chatId)
             .Include(m => m.Sender)

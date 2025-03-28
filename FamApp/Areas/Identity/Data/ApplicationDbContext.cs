@@ -1,10 +1,6 @@
-﻿using FamApp.Areas.Identity.Data;
-using FamApp.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using FamApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using System.Reflection.Emit;
 
 namespace FamApp.Data;
 

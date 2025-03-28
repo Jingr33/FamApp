@@ -15,67 +15,58 @@ namespace FamApp.Controllers
     public class ChatsController : Controller
     {
         private readonly IChatService _chatService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ChatsController(IChatService chatService, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public ChatsController(IChatService chatService, 
+                               IUserService userService,
+                               IMapper mapper,
+                               UserManager<ApplicationUser> userManager)
         {
-            this._chatService = chatService;
-            this._mapper = mapper;
-            this._userManager = userManager;
+            _chatService = chatService;
+            _userService = userService;
+            //_mapper = mapper;
+            //_userManager = userManager;
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("User not found");
-            var chats = await this._chatService.GetUserChatsAsync(userId);
-            var chatViewModels = this._mapper.Map<List<ChatViewModel>>(chats);
-
-            foreach (var (chatVM, chatEntity) in chatViewModels.Zip(chats, (vm, entity) => (vm, entity)))
-            {
-                chatVM.Participants = chatEntity.UserChats?.Where(cu => cu.User != null).Select(cu => cu.User.UserName).ToList();
-                chatVM.Messages = chatEntity.Messages?.ToList() ?? new List<Message>();
-            }
-
+            var user = await _userService.GetCurrentUserAsync();
+            var userId = await _userService.GetUserIdAsync(user);
+            var chatViewModels = await _chatService.GetUserChatViewModelAsync(userId);
             return View(chatViewModels);
         }
 
         [HttpGet]
         public async Task<IActionResult> Chat(int chatId)
         {
-            var chat = await this._chatService.GetChatByIdAsync(chatId);
-            if (chat == null)
-            {
+            var chatViewModel = await _chatService.GetChatViewModelByIdAsync(chatId);
+            if (chatViewModel == null)
                 return NotFound();
-            }
 
-            var user = await _userManager.GetUserAsync(User);
-
-            var chatViewModel = this._mapper.Map<ChatViewModel>(chat);
-            chatViewModel.CurrentUser = user.Id;
             return PartialView("Chat", chatViewModel);
         }
 
         public async Task<IActionResult> CreateChat()
         {
-            ViewBag.Users = new SelectList(await this._userManager.Users.ToListAsync(), "Id", "Nick");
-            ViewBag.ThisUserId = this._userManager.GetUserId(this.User);
-            return View();
+            var createChatViewModel = await _chatService.GetCreateChatViewModel();
+            return View(createChatViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateChat(CreateChatViewModel model)
         {
-            string thisUserId = this._userManager.GetUserId(this.User) ?? throw new Exception("thisUserId is unknown");
+            var currentUser = await _userService.GetCurrentUserAsync();
             if (!ModelState.IsValid)
             {
-                ViewBag.Users = new SelectList(await this._userManager.Users.ToListAsync(), "Id", "Nick");
-                ViewBag.ThisUserId = thisUserId;
+                model.Users = await _chatService.GetUserSelectListAsync();
+                model.CurrentUserId = await _userService.GetUserIdAsync(currentUser);
                 return View(model);
             }
 
-            await this._chatService.AddChatAsync(model, thisUserId);
+            await this._chatService.CreateChatAsync(model);
             return RedirectToAction("Index");
         }
 

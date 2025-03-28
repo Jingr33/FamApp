@@ -1,6 +1,7 @@
 ﻿using FamApp.Areas.Identity.Data;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace FamApp.Interfaces
 {
@@ -11,5 +12,8 @@ namespace FamApp.Interfaces
         Task<ApplicationUser?> GetCurrentUserAsync();
         Task<IdentityResult> ChangePasswordAsync(ApplicationUser user, ChangePasswordViewModel model);
         Task RefreshSignInAsync(ApplicationUser user);
+        Task<string> GetUserIdAsync(ApplicationUser user);
+        Task<List<ApplicationUser>> GetAllUsersAsync();
+        Task<List<ApplicationUser>> GetUsersByIdsAsync(List<string> userIds);
     }
 }

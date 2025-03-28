@@ -1,4 +1,5 @@
-﻿@model Ticket 
+﻿@using FamApp.ViewModels
+@model CreateTicketViewModel
 
 
 <div class="container mt-4 mv-600">
@@ -28,9 +29,9 @@
                         <div class="form-group mb-3">
                             <label>Vyřeší *</label>
                             <select name="SelectedUserIds" class="form-control" multiple="multiple">
-                                @if (ViewData["Users"] as SelectList != null)
+                                @if (Model.Users != null)
                                 {
-                                    @foreach (var user in ViewData["Users"] as SelectList)
+                                    @foreach (var user in Model.Users)
                                     {
                                         <option value="@user.Value">@user.Text</option>
                                     }

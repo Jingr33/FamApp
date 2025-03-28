@@ -2,6 +2,7 @@
 using FamApp.Interfaces;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FamApp.Services
 {
@@ -57,6 +58,20 @@ namespace FamApp.Services
         public async Task RefreshSignInAsync(ApplicationUser user)
         {
             await _userRepository.RefreshSignInAsync(user);
+        }
+
+        public async Task<string> GetUserIdAsync(ApplicationUser? user)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user), "User cannot be null");
+
+            return await _userRepository.GetUserIdAsync(user);
+        }
+
+        public async Task<List<SelectListItem>> GetUserSelectListAsync()
+        {
+            var users = await _userRepository.GetAllUsersAsync();
+            return users.Select(u => new SelectListItem { Value = u.Id, Text = u.Nick}).ToList();
         }
     }
 }
