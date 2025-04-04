@@ -1,6 +1,10 @@
 ﻿@using FamApp.ViewModels
 @model CreateChatViewModel
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+}
+
 <div class="container mw-600 p-2">
     <form asp-action="CreateChat" method="post">
         <div class="form-group py-3">
@@ -9,14 +13,29 @@
         </div>
 
         <div class="form-group py-3">
-            <label for="users">Účastníci chatu</label>
-            <select name="Users" class="form-control" multiple="multiple">
-                @foreach (var user in Model.Users) 
+            <label asp-for="Color" class="form-label">Barva chatu</label>
+            <div class="color-picker">
+                @foreach (var color in new[] { "#ff5733", "#33ff57", "#3357ff", "#ff33a8", "#ffb833", "#8d33ff", "#33fff2", "#ff3385", "#7a33ff", "#ff7733" })
                 {
-                    @if (user.Value != Model.CurrentUserId)
+                    <div class="color-box" data-color="@color" style="background-color: @color;" onclick="selectColor(this)"></div>
+                }
+            </div>
+            <input type="hidden" id="selectedColor" name="Color" value="@Model.Color" />
+        </div>
+
+        <div class="form-group py-3">
+            <label asp-for="SelectedUsers">Účastníci chatu</label>
+            <select asp-for="SelectedUsers" class="form-control" multiple="multiple">
+                @if(Model.Users != null && Model.Users.Count > 0)
+                {
+                    @foreach (var user in Model.Users)
                     {
-                        <option value="@user.Value">@user.Text</option>
+                        @if (user.Value != Model.CurrentUserId)
+                        {
+                            <option value="@user.Value">@user.Text</option>
+                        }
                     }
+
                 }
             </select>
         </div>
@@ -25,11 +44,19 @@
 
         <div class="d-flex justify-content-center">
             <div class="col-6">
-                <button class="btn btn-primary px-5 py-2" type="submit">Vytvořit</button>
+                <a asp-controller="Chats" asp-action="Index" class="btn btn-secondary px-4 py-2">Zrušit</a>
             </div>
             <div class="col-6 align-right">
-                <a asp-controller="Chats" asp-action="Index" class="btn btn-secondary px-4 py-2">Zrušit</a>
+                <button class="btn btn-primary px-5 py-2" type="submit">Vytvořit</button>
             </div>
         </div>
     </form>
 </div>
+
+<script>
+    function selectColor(element) {
+        document.querySelectorAll('.color-box').forEach(box => box.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('selectedColor').value = element.getAttribute('data-color');
+    }
+</script>

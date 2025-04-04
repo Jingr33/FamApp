@@ -19,7 +19,7 @@ async function startConnection() {
 
     } catch (err) {
         console.error("Chyba při připojení k SignalR:", err);
-        setTimeout(startConnection, 5000); // Pokus o opětovné připojení
+        setTimeout(startConnection, 5000);
     }
 }
 
@@ -30,9 +30,10 @@ async function loadOldMessages(chatId) {
 
         const messageBox = document.getElementById("messages");
         messageBox.innerHTML = "";
+        const chatColor = document.getElementById("foreign-chat-color").value;
 
         messages.forEach(msg => {
-            appendMessageToChat(msg.senderId, msg.senderNick, msg.content, msg.sentAt);
+            appendMessageToChat(msg.senderId, msg.senderNick, msg.content, chatColor, msg.sentAt);
         });
 
         scrollToBottom();
@@ -69,18 +70,10 @@ function sendMessage() {
     window.isSending = false;
 }
 
-function appendMessageToChat(userId, userNick, message, time = "Neznámý čas") {
+function appendMessageToChat(userId, userNick, message, chatColor, time = "Neznámý čas") {
     const messageBox = document.getElementById("messages");
     const msgDiv = document.createElement("div");
     msgDiv.classList.add("row", "message");
-
-    const currentUser = window.currentUser
-
-    if (userId == currentUser) {
-        msgDiv.classList.add("my-message");
-    } else {
-        msgDiv.classList.add("foreign-message");
-    }
 
     msgDiv.innerHTML = `
         <div class="col-auto message-block" data-bs-toggle="tooltip" title="${time}">
@@ -89,6 +82,18 @@ function appendMessageToChat(userId, userNick, message, time = "Neznámý čas")
             ${time ? `<span class="time">${time}</span>` : ""}
         </div>
     `;
+
+    const currentUser = window.currentUser
+    if (userId == currentUser) {
+        msgDiv.classList.add("my-message");
+    } else {
+        msgDiv.classList.add("foreign-message");
+        const contentElement = msgDiv.querySelector('.content')
+        if (contentElement) {
+            contentElement.style.backgroundColor = chatColor;
+        }
+    }
+
 
     messageBox.appendChild(msgDiv);
     scrollToBottom();
@@ -118,8 +123,10 @@ startConnection();
 
 connection.on("ReceiveMessage", function (user, message) {
     console.log("Příchozí zpráva: ", user, message);
+
     timeNow = formatDatetimeNow();
-    appendMessageToChat(window.currentUser, user.senderNick, message, timeNow);
+    const chatColor = document.getElementById("foreign-chat-color").value;
+    appendMessageToChat(window.currentUser, user, message, chatColor, timeNow);
 });
 
 connection.onclose(error => {

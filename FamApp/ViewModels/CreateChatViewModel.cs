@@ -5,11 +5,13 @@ namespace FamApp.ViewModels
 {
     public class CreateChatViewModel
     {
+        [Required]
         public string Name { get; set; }
-
+        public string Color { get; set; } = "#cccccc";
         public string? CurrentUserId { get; set; }
 
-        [Required]
         public List<SelectListItem>? Users { get; set; }
+        [Required]
+        public List<string> SelectedUsers { get; set; } = new List<string>();
     }
 }

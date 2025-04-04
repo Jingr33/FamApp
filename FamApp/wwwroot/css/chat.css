@@ -5,13 +5,14 @@
     padding-bottom: 15px;
     border-bottom: 1px solid #b7b7b7;
 }
-#chat #chat-container {
-    padding: 0;
+#chat .chat-container {
+    padding: 0 5px;
 }
 #chat #chat-content {
     padding: 10px;
     text-align: center;
     align-items: center;
+    text-overflow: ellipsis;
 }
 #chat #chat-content .empty-chat-box {
     font-size: 1.3em;
@@ -25,32 +26,62 @@
     color: #232323;
     font-size: 1.5em;
 }
+#chat .message-box .delete-chat-btn {
+    border: 1px solid #b7b7b7
+    
+}
+#chat .message-box .delete-chat-btn:hover {
+    border-color: var(--chat-color);
+}
+#chat .message-box .delete-chat-btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 #chat .chat-group {
-    padding: 5px 0;
+    padding: 5px 0px;
+    max-height: 80vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 #chat .chat-group a {
     height: 60px;
     padding: 5px;
+    margin-top: 5px;
     text-decoration: none;
     color: #000000;
     border-radius: 5px;
+    background: #eeeeee;
+    overflow: hidden;
 }
 #chat .chat-group a:hover {
-    background: #eeeeee;
+    background: #cdcdcd;
 }
 #chat .chat-group a h4 {
     font-size: 1em;
     font-weight: bold;
 }
-#messages {
+#chat .color-flag {
+    height: 10px;
+    width: 12px;
+    clip-path: circle(45%);
+}
+
+#chat #messages {
     height: 500px;
     max-width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     padding-bottom: 10px;
+}
+#chat .message-box-header .row {
+    padding-bottom: 5px;
+}
+#chat .message-box-header .delete-chat {
+    padding: 0 10px;
+    justify-content: center;
+    align-items: center;
 }
 #chat #message-input {
     height: 40px;
@@ -75,7 +106,7 @@
 #chat #chat-content {
     align-content: center;
 }
-#chat .#chat-content p {
+#chat #chat-content p {
     text-align: center;
     color: #979797;
     font-size: 1.3em;
@@ -144,4 +175,28 @@
 #chat #messages .foreign-message .user-nick {
     color: #0c3d7a;
     text-align: left
+}
+
+
+.color-picker {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.color-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border 0.2s;
+}
+
+.color-box:hover {
+    transform: scale(1.15);
+}
+
+.color-box.selected {
+    border: 3px solid black;
 }

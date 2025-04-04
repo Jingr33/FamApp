@@ -47,8 +47,7 @@ namespace FamApp.Services
         public async Task AddChatAsync (CreateChatViewModel model, string thisUserId)
         {
             var creator = await _userRepository.GetUserByIdAsync(thisUserId);
-            var selectedUserIds = model.Users.Select(u => u.Value).ToList();
-            var selectedUsers = await _userRepository.GetUsersByIdsAsync(selectedUserIds);
+            var selectedUsers = await _userRepository.GetUsersByIdsAsync(model.SelectedUsers);
 
             if (!selectedUsers.Any(u => u.Id == thisUserId))
             {
@@ -56,7 +55,7 @@ namespace FamApp.Services
             }
 
             Chat chat = this._mapper.Map<Chat>(model);
-            chat.IsGroup = model.Users.Count > 1 ? true : false;
+            chat.IsGroup = selectedUsers.Count >= 3 ? true : false;
             await this._chatRepository.AddChatAsync(chat, selectedUsers);
         }
 
@@ -116,12 +115,21 @@ namespace FamApp.Services
 
         public async Task CreateChatAsync(CreateChatViewModel model)
         {
-            var user = await _userRepository.GetCurrentUserAsync();
-            if (user == null) 
-                throw new Exception("Unknown user.");
-            string thisUserId = await _userRepository.GetUserIdAsync(user);
-            
+            var currentUser = await _userRepository.GetCurrentUserAsync();
+            if (currentUser == null) 
+                throw new Exception("Unknown currentUser.");
+
+            string thisUserId = await _userRepository.GetUserIdAsync(currentUser);
             await AddChatAsync(model, thisUserId);
+        }
+
+        public async Task DeleteChatAsync(int chatId)
+        {
+            Chat chat = await _chatRepository.GetChatByIdAsync(chatId);
+            if (chat == null)
+                throw new Exception("Unknown chat.");
+
+            await _chatRepository.DeleteChatAsync(chat);
         }
     }
 }

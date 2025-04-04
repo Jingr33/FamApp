@@ -73,5 +73,12 @@ namespace FamApp.Services
             var users = await _userRepository.GetAllUsersAsync();
             return users.Select(u => new SelectListItem { Value = u.Id, Text = u.Nick}).ToList();
         }
+
+        public async Task<string> GetUserNickByIdAsync(string userId)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            return user.Nick;
+        }
+
     }
 }

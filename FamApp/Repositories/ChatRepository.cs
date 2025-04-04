@@ -78,5 +78,11 @@ namespace FamApp.Repositories
             })
             .ToListAsync();
         }
+
+        public async Task DeleteChatAsync(Chat chat)
+        {
+            _db.Chat.Remove(chat);
+            await this._db.SaveChangesAsync();
+        }
     }
 }

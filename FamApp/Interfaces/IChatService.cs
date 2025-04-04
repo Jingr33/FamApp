@@ -16,5 +16,6 @@ namespace FamApp.Interfaces
         Task<CreateChatViewModel> GetCreateChatViewModel();
         Task CreateChatAsync(CreateChatViewModel model);
         Task<List<SelectListItem>> GetUserSelectListAsync();
+        Task DeleteChatAsync(int chatId);
     }
 }

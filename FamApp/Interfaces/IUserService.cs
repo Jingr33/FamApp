@@ -12,5 +12,6 @@ namespace FamApp.Interfaces
         Task RefreshSignInAsync(ApplicationUser user);
         Task<string> GetUserIdAsync(ApplicationUser? user);
         Task<List<SelectListItem>> GetUserSelectListAsync();
+        Task<string> GetUserNickByIdAsync(string userId);
     }
 }

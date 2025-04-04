@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using FamApp.Areas.Identity.Data;
 using FamApp.Interfaces;
-using FamApp.Models;
 using FamApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using System.Data;
 
 namespace FamApp.Controllers
 {
@@ -16,18 +13,11 @@ namespace FamApp.Controllers
     {
         private readonly IChatService _chatService;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ChatsController(IChatService chatService, 
-                               IUserService userService,
-                               IMapper mapper,
-                               UserManager<ApplicationUser> userManager)
+        public ChatsController(IChatService chatService, IUserService userService)
         {
             _chatService = chatService;
             _userService = userService;
-            //_mapper = mapper;
-            //_userManager = userManager;
         }
 
         [Authorize]
@@ -58,14 +48,10 @@ namespace FamApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateChat(CreateChatViewModel model)
         {
-            var currentUser = await _userService.GetCurrentUserAsync();
             if (!ModelState.IsValid)
-            {
-                model.Users = await _chatService.GetUserSelectListAsync();
-                model.CurrentUserId = await _userService.GetUserIdAsync(currentUser);
-                return View(model);
-            }
+                return RedirectToAction("CreateChat");
 
+            Console.WriteLine($"ÚČASTNÍci CHATU: {model.SelectedUsers.Count}");
             await this._chatService.CreateChatAsync(model);
             return RedirectToAction("Index");
         }
@@ -75,6 +61,13 @@ namespace FamApp.Controllers
         {
             var messageDtos = await _chatService.GetMessagesForChat(chatId);
             return Json(messageDtos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteChat(int chatId)
+        {
+            await _chatService.DeleteChatAsync(chatId);
+            return RedirectToAction("Index");
         }
     }
 }

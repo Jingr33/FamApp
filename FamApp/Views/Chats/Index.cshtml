@@ -20,7 +20,8 @@
                 {
                     <a class="chat-link" href="#" data-url="@Url.Action("Chat", "Chats", new { chatId = chat.Id})">
                         <div class="row">
-                            <h4>@chat.Name</h4>
+                            <div class="col-auto color-flag" style="background: @chat.Color"></div>
+                            <h4 class="col">@chat.Name</h4>
                         </div>
                         <div class="row">
                             @if (chat.Messages != null && chat.Messages.Count > 0)
